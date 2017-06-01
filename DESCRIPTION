@@ -7,5 +7,6 @@ Description: A collection of miscellaneous R functions that I often use.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Import: rstudioapi
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)

@@ -2,19 +2,18 @@
 % Please edit documentation in R/all.R
 \name{roxygen.comment}
 \alias{roxygen.comment}
-\title{Return a source code with roxygen comments}
+\title{Apply roxygen comments}
 \usage{
-roxygen.comment(input, start = 1, output = input)
-}
-\arguments{
-\item{input}{input filename.}
-
-\item{start}{starting character in each line.}
-
-\item{output}{output filename.}
+roxygen.comment()
 }
 \description{
-Return a source code with roxygen comments
+Apply roxygen comments
+}
+\details{
+If all lines 'touched' by the cursor or selection start with a
+roxygen2 comment, then the method will remove it. Otherwise, it will add the
+roxygen2 comment. In the case there is multiple cursors/selection only
+the first one (the primary one) will be considered.
 }
 \author{
 Thibault Vatter

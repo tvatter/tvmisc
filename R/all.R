@@ -1,17 +1,35 @@
 
-#' Return a source code with roxygen comments
-#'
-#' @param input input filename.
-#' @param start starting character in each line.
-#' @param output output filename.
+#' Apply roxygen comments
+#' 
+#' @details If all lines 'touched' by the cursor or selection start with a 
+#' roxygen2 comment, then the method will remove it. Otherwise, it will add the 
+#' roxygen2 comment. In the case there is multiple cursors/selection only 
+#' the first one (the primary one) will be considered.
 #'
 #' @author Thibault Vatter
 #'
 #' @export
-roxygen.comment <- function(input, start=1, output=input){
-  rox <- sapply(readLines(input), function(x)
-    paste("#'",substring(x,start)))
-  writeLines(rox, output)
+#' @importFrom rstudioapi getActiveDocumentContext insertText
+#' primary_selection modifyRange
+roxygen.comment <- function() {
+
+  # Capture the selection
+  context <- getActiveDocumentContext()
+  selection <- primary_selection(context)
+  
+  # Involved rows
+  row_range <- selection$range$start[['row']]:selection$range$end[['row']]
+  
+  # If roxygen2 block remove #', otherwise add #'
+  is_roxy <- sapply(context$contents[row_range], 
+                    function(x) substr(x, 1L, 2L) == "#'")
+  if(all(is_roxy)) {
+    rng <- Map(function(x,y,z) c(x,y,x,z), row_range, 1, 4)
+    modifyRange(rng, "")
+  } else {
+    pos <- Map(c, row_range, 1)
+    insertText(pos, "#' ")
+  }
 }
 
 #' Soure a directory
