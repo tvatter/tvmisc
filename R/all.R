@@ -32,6 +32,40 @@ roxygen.comment <- function() {
   }
 }
 
+
+#' Apply C/C++ style comments
+#' 
+#' @details If all lines 'touched' by the cursor or selection start with a 
+#' C/C++ style comment, then the method will remove it. Otherwise, it will add the 
+#' C/C++ style comment. In the case there is multiple cursors/selection only 
+#' the first one (the primary one) will be considered.
+#'
+#' @author Thibault Vatter
+#'
+#' @export
+#' @importFrom rstudioapi getActiveDocumentContext insertText
+#' primary_selection modifyRange
+cstyle.comment <- function() {
+  
+  # Capture the selection
+  context <- getActiveDocumentContext()
+  selection <- primary_selection(context)
+  
+  # Involved rows
+  row_range <- selection$range$start[['row']]:selection$range$end[['row']]
+  
+  # If C/C++ block remove //, otherwise add //
+  is_roxy <- sapply(context$contents[row_range], 
+                    function(x) substr(x, 1L, 2L) == "//")
+  if(all(is_roxy)) {
+    rng <- Map(function(x,y,z) c(x,y,x,z), row_range, 1, 4)
+    modifyRange(rng, "")
+  } else {
+    pos <- Map(c, row_range, 1)
+    insertText(pos, "// ")
+  }
+}
+
 #' Soure a directory
 #'
 #' @param path directory to source

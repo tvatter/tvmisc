@@ -2,3 +2,8 @@ Name: Roxygen comment
 Description: Comments and uncomments using roxygen style
 Binding: roxygen.comment
 Interactive: false
+
+Name: C/C++ comment
+Description: Comments and uncomments using C/C++ style
+Binding: cstyle.comment
+Interactive: false
